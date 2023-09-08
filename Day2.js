@@ -36,7 +36,9 @@ function question(pregunta){
             output: process.stdout
         })
         rl.question(pregunta, respuesta =>{
-            resolve(respuesta)})
+            resolve(respuesta)
+            rl.close();
+        });
     })}
 
     question('¿Como te llamas?')
@@ -53,34 +55,27 @@ function question(pregunta){
 })
 .then(()=>{
     return fs.writeFile('rlcatch.json', JSON.stringify(persorl))
-    .then(()=>{
+    
+})
+.then(()=>{
     return fs.readFile('rlcatch.json','utf8')
     })
     .then( data => {
     console.log(JSON.parse(data))
     })
+    .then(()=>{preguntaAsync()})
     .catch(err => {
     console.log(err);
     });
-});
 //Reto3 async/await
-function pregunta(quest){
-    return new Promise ((resolve, reject)=> {
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        })
-        rl.question(quest, respuesta =>{
-            resolve(respuesta)})
-    })}
 
 async function preguntaAsync(){
     try{
-        let name= await pregunta('¿Nombre?');
+        let name= await question('¿Nombre?');
         persoasync.name = name;
-        let surname= await pregunta('¿Apellido?');
+        let surname= await question('¿Apellido?');
         persoasync.surname = surname;
-        let age= await pregunta('¿Edad?');
+        let age= await question('¿Edad?');
         persoasync.age = age;
         await fs.writeFile('rlasync.json',JSON.stringify(persoasync))
             let asyncperson = await fs.readFile('rlasync.json','utf8')
@@ -89,4 +84,3 @@ async function preguntaAsync(){
             console.log(error);
         }
     }
-preguntaAsync();
