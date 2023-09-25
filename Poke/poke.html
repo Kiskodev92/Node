@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon</title>
+    <script src="poke.js" defer></script>
+    <link rel="stylesheet" href="poke.css"/>
+</head>
+<body>
+    <form action="" onsubmit="searchPkmn(event)">
+        <input type="text" name="pokemon">
+    </form>
+    <div div-poke-card class="pokecard"> 
+        <div data-poke-name>Pokedex</div>
+        <div data-poke-img-container class="img-container">
+            <img data-poke-img src="./poke-shadow.png" class="poke-img">
+        </div>
+        <div data-poke-id></div>
+        <div data-poke-types class="poke-type"></div>
+        <div data-poke-stats class="poke-stats"></div>
+    </div>
+</body>
+</html>
