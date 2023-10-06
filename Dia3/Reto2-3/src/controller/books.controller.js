@@ -3,23 +3,25 @@ const app = express();
 const Book = require('../models/book');
 
 let books = [
-            new Book ("300 recetas sencillas", "cocina", "Arguillano", 20, "aqui hay foto", 1, 0),
-            new Book ("200 recetas medias", "cocina", "Arguillano", 11, "aqui hay 2foto", 2, 0),
-            new Book ("100 recetas complicadas", "cocina", "Arguillano", 45, "aqui hay 3foto", 3, 0)
+    new Book("Juedo de tronos","Fantasia", "George R.R Martin", 15.99, "https://imagessl4.casadellibro.com/a/l/t5/64/9788496208964.jpg", 1, 0 ),
+    new Book("Memorias de Idhun","Fantasia", "Laura Gallego", 24.99, "https://www.lauragallego.com/wp-content/uploads/2004/09/idhun_portada.jpg", 2, 0 ),
+    new Book("La cámara secreta","Fantasia", "JK Rowling", 17.99, "https://imagedelivery.net/QDkyDSqaJI1JEO0MqH_3SQ/60a007e7-31e9-439c-be44-10704c15c800/default", 3, 0 ),
+    new Book("El hobbit","Fantasia", "Tolkien", 17.99, "https://proassetspdlcom.cdnstatics2.com/usuaris/libros/fotos/357/original/portada_el-hobbit_j-r-r-tolkien_202207271130.jpg", 4, 0 ),
 ];
 
 const getbookid = (req, res) =>{
     let getbook = books.find(book => book.id_book == req.query.id_book)
     console.log(getbook)
 
-    if(getbook){ res.send("Libro encontrado")
+    if(getbook){ res.send({error: false, codigo: 200, mensaje: 'Libro encontrado', data: getbook})
 } else {res.send({error: true, codigo: 404, mensaje: "Libro no encontrado"})}
+
 }
 
 const getbooks = (req,res) => {
     let answer;
     if(books){
-        answer = req.query
+        answer = {error: false, codigo: 200, mensaje: 'Libros encontrados', data: books}
     }else {
         answer = {error: true, codigo: 404, mensaje: 'Los libros no existen'}
     } 
@@ -33,6 +35,7 @@ const postbooks = (req,res) => {
         const newbook = new Book(title, type, author, price, photo,id_book, id_user);
         books.push(newbook);
         post= {error:false, codigo:200, mensaje:"Libro añadido correctamente", data: books}
+        console.log(newbook);
     }else{
         post = {error:true, codigo:404, mensaje:"No se pudo añadir el libro"}
     }
@@ -44,7 +47,8 @@ const putbooks = (req, res) =>{
     let bookmod;
 
     if(req.body.id_book){
-        bookmod = books.find(value => value.id == req.body.id);
+        bookmod = books.find(value => value.id === req.body.id);
+        console.log(bookmod);
         if(!-1){
             bookmod.title = req.body.title
             bookmod.type = req.body.type
@@ -61,19 +65,9 @@ const putbooks = (req, res) =>{
 }
 
 const deletebooks = (req, res) =>{
-    let delbook = false;
-
-    books.forEach((book,i) => {
-        if(req.body.id_book == book.id_book){
-            books.splice(i,1);
-            delbook = true;
-        }
-    });
-    if (delbook){
-        res.send("Se ha eliminado el libro seleccionado correctamente");
-    } else { 
-        res.send({error: true, codigo: 404, mensaje: "Libro no encontrado"})
-    }
+    books= books.filter(book => book.id_book != req.body.id_book)
+    console.log("Entro al delete")
+    res.send({error:false, codigo: 200, mensaje: "libro borrado"})
 }
 
 module.exports ={getbookid, getbooks, postbooks, putbooks, deletebooks}
